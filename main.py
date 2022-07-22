@@ -4,6 +4,7 @@
 # Current Issues: Drafting is still manual, eventually need computer input, a computer cannot determine the amount of
 # drafts they get yet
 # Visualization is working almost correctly, needs to handle player death still
+# Cards are still unused. Will be used after bot has been created
 
 import csv
 import random
@@ -166,6 +167,7 @@ class Player:
                         return True
         return False
 
+
 class Card:
     def __init__(self):
         self.kind = ""
@@ -297,8 +299,6 @@ def create_player(num_troops, color):  # This will create a player and set the c
 
 
 class Chart:
-    min_x = 0
-    max_x = 10
 
     def __init__(self, players):
         plt.ion()

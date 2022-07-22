@@ -1,0 +1,37 @@
+Factors a player may consider in risk:
+
+Number of troops an opponent has
+Number of troops self has
+Number of troops on all territories
+
+If there is a connection between territory and own territory, for fortifying and attacking
+
+Connections between all territories, (such as how many territories are available to attack or be attacked by you after opening them up)
+
+Number of troops an opponent could gain
+
+Continents possessed by each players and their bonuses
+How close to completing a continent for self and opponent
+
+
+Number of territories controlled by each opponent
+
+Number of Cards each opponent has
+
+Card sets and their worth
+
+Own cards
+
+
+
+
+Outputs of player input:
+
+Draft troops
+
+Attack with territories in player control
+How many troops to attack with
+How many troops to send after a successful attack
+
+Where to fortify
+
