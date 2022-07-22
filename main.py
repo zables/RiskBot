@@ -293,6 +293,9 @@ class Chart:
         self.lines = []
         self.troop_count = []
         self.figure, self.ax = plt.subplots()
+        self.ax.set_title("Turns vs Number of Troops")
+        self.ax.set_xlabel("Turns")
+        self.ax.set_ylabel("Total Number of Troops")
         for player in players:
             line, = self.ax.plot([], [], color=player.color)
             self.lines.append(line)
