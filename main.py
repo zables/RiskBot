@@ -290,21 +290,38 @@ class Chart:
     def __init__(self, players):
         plt.ion()
         self.turns = [0]
+
         self.lines = []
+        self.lines2 = []
+
         self.troop_count = []
+        self.terr_count = []
+
         self.figure, self.ax = plt.subplots()
         self.ax.set_title("Turns vs Number of Troops")
         self.ax.set_xlabel("Turns")
         self.ax.set_ylabel("Total Number of Troops")
+        self.fig2, self.ax2 = plt.subplots()
+
         for player in players:
             line, = self.ax.plot([], [], color=player.color)
+            line2, = self.ax2.plot([], [], color=player.color)
+
             self.lines.append(line)
+            self.lines2.append(line2)
+
             self.troop_count.append([players[0].num_troops])
+            self.terr_count.append([len(player.controlled_territories)])
+
 
         # AutoScales on the x and y axes
         self.ax.set_autoscaley_on(True)
         self.ax.set_autoscalex_on(True)
         self.ax.grid()
+
+        self.ax2.set_autoscaley_on(True)
+        self.ax2.set_autoscalex_on(True)
+        self.ax2.grid()
 
     def update_chart(self, players, turn):
         self.turns.append(turn)
@@ -312,12 +329,23 @@ class Chart:
             self.troop_count[i].append(players[i].num_troops)
             self.lines[i].set_xdata(self.turns)
             self.lines[i].set_ydata(self.troop_count[i])
+
+            self.terr_count[i].append(len(players[i].controlled_territories))
+            self.lines2[i].set_xdata(self.turns)
+            self.lines2[i].set_ydata(self.terr_count[i])
+
         # Need both of these in order to rescale
         self.ax.relim()
         self.ax.autoscale_view()
+
+        self.ax2.relim()
+        self.ax2.autoscale_view()
         # We need to draw *and* flush
         self.figure.canvas.draw()
         self.figure.canvas.flush_events()
+
+        self.fig2.canvas.draw()
+        self.fig2.canvas.flush_events()
 
 
 def gameplay(continents, players, deck):
