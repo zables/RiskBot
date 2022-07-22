@@ -153,6 +153,19 @@ class Player:
             self.set_num_troops()
             terr_to.player_control.set_num_troops()
 
+    def fortify_path(self, terr_from, terr_to):  # Determines if the path can be fortified to using BFS
+        path = [terr_from]
+        checked = []
+        while len(path) > 0:
+            terr = path.pop()
+            checked.append(terr)
+            for connection in terr.connections:
+                if connection.player_control == self and not checked.__contains__(connection) and not path.__contains__(connection):
+                    path.append(connection)
+                    if connection == terr_to:
+                        return True
+        return False
+
 class Card:
     def __init__(self):
         self.kind = ""
@@ -416,6 +429,10 @@ def gameplay(continents, players, deck):
 
 
     print(players[0].color, "WINS in", turn, "Turns!")
+
+
+
+
 
 
 continents = create_territories()
