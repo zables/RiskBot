@@ -296,7 +296,7 @@ class Chart:
         for player in players:
             line, = self.ax.plot([], [], color=player.color)
             self.lines.append(line)
-            self.troop_count.append([25])
+            self.troop_count.append([players[0].num_troops])
 
         # AutoScales on the x and y axes
         self.ax.set_autoscaley_on(True)
@@ -388,6 +388,6 @@ def gameplay(continents, players, deck):
 
 
 continents = create_territories()
-players = create_map(5, continents)
+players = create_map(6, continents)
 deck = Deck(continents)
 gameplay(continents, players, deck)
