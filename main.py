@@ -167,6 +167,22 @@ class Player:
                         return True
         return False
 
+    def attack_path(self,terr_from, terr_to):
+        # Finds the least costliest path from a location on the board to another, returns cost of action. This may
+        # need to change in the future to allow for different outcomes and opportunities such as completing a continent
+
+        # Create a list of dictionaries that sort by the first key of distance
+        class Node:
+            def __init__(self):
+                self.territory = ''
+                self.cost = 9999999999999 # when assigning cost, always add 1 to a territory, because one must be left behind on previous territory
+                self.backedge = ''
+                self.visited = 0
+
+        visited = []
+        unvisited = []
+
+
 
 class Card:
     def __init__(self):
