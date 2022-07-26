@@ -177,10 +177,38 @@ class Player:
                 self.territory = ''
                 self.cost = 9999999999999 # when assigning cost, always add 1 to a territory, because one must be left behind on previous territory
                 self.backedge = ''
-                self.visited = 0
+                self.visited = False
 
         visited = []
         unvisited = []
+        node = Node()
+        node.territory = terr_from
+        node.cost = 0
+        node.visited = True
+        visited.append(node)
+        multimap = []
+        dict = {
+            "Distance" : node.cost,
+            "Node" : node
+        }
+        multimap.append(dict)
+        for item in terr_from.connections:
+            if item.player_control != self:
+                node = Node()
+                node.territory = item
+                node.cost = item.num_troops
+                node.backedge = terr_from
+                dict = {
+                    "Distance": node.cost + 1,
+                    "Node": node
+                }
+                unvisited.append(node)
+                multimap.append(dict)
+        multimap = sorted(multimap, key=lambda dict: dict['Distance'])
+        while len(unvisited) > 0:
+            unvisited.pop()
+
+
 
 
 
@@ -380,6 +408,7 @@ class Chart:
 def gameplay(continents, players, deck):
     turn = 0
     chart = Chart(players)
+    players[0].attack_path(players[0].controlled_territories[0], players[1].controlled_territories[0])
     while(len(players)) > 1:
         turn += 1
         for player in players:
