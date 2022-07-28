@@ -167,50 +167,52 @@ class Player:
                         return True
         return False
 
-    def attack_path(self,terr_from, terr_to):
+    def attack_path(self,terr_from, terr_to):  # Appears to return the path in reverse order
         # Finds the least costliest path from a location on the board to another, returns cost of action. This may
         # need to change in the future to allow for different outcomes and opportunities such as completing a continent
 
-        # Create a list of dictionaries that sort by the first key of distance
         class Node:
             def __init__(self):
-                self.territory = ''
+                self.territory = ""
                 self.cost = 9999999999999 # when assigning cost, always add 1 to a territory, because one must be left behind on previous territory
                 self.backedge = ''
-                self.visited = False
 
-        visited = []
-        unvisited = []
         node = Node()
         node.territory = terr_from
         node.cost = 0
-        node.visited = True
-        visited.append(node)
         multimap = []
         dict = {
-            "Distance" : node.cost,
-            "Node" : node
+            "Distance": node.cost,
+            "Node": node
         }
+        # Create first Node, place on multimap
         multimap.append(dict)
-        for item in terr_from.connections:
-            if item.player_control != self:
-                node = Node()
-                node.territory = item
-                node.cost = item.num_troops
-                node.backedge = terr_from
+        #multimap = sorted(multimap, key=lambda dict: dict['Distance'])
+
+        # Visit first Node, pop it, all new nodes have a backedge to the first node
+        visited = []
+        while len(multimap) > 0:
+            # Pops the first element, with the shortest distance
+            currentDict = multimap.pop(0)
+            currentNode = currentDict["Node"]
+            visited.append(currentNode.territory)
+            if visited.__contains__(terr_to):
+                while currentNode.backedge != "":
+                    currentNode = currentNode.backedge
+                return
+            # Creates a new Node and associated dictionary, places it back on the multimap
+            for terr in currentNode.territory.connections:
+                if visited.__contains__(terr) or terr.player_control == self:
+                    continue
+                newNode = Node()
+                newNode.territory = terr
+                newNode.cost = terr.num_troops
+                newNode.backedge = currentNode
                 dict = {
-                    "Distance": node.cost + 1,
-                    "Node": node
+                    "Distance": newNode.cost + 1,
+                    "Node": newNode
                 }
-                unvisited.append(node)
                 multimap.append(dict)
-        multimap = sorted(multimap, key=lambda dict: dict['Distance'])
-        while len(unvisited) > 0:
-            unvisited.pop()
-
-
-
-
 
 class Card:
     def __init__(self):
@@ -358,7 +360,11 @@ class Chart:
         self.ax.set_title("Turns vs Number of Troops")
         self.ax.set_xlabel("Turns")
         self.ax.set_ylabel("Total Number of Troops")
+
         self.fig2, self.ax2 = plt.subplots()
+        self.ax2.set_title("Turns vs Number of Territories")
+        self.ax2.set_xlabel("Turns")
+        self.ax2.set_ylabel("Total Number of Territories")
 
         for player in players:
             line, = self.ax.plot([], [], color=player.color)
@@ -408,7 +414,7 @@ class Chart:
 def gameplay(continents, players, deck):
     turn = 0
     chart = Chart(players)
-    players[0].attack_path(players[0].controlled_territories[0], players[1].controlled_territories[0])
+
     while(len(players)) > 1:
         turn += 1
         for player in players:
